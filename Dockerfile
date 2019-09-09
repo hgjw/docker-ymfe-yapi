@@ -1,6 +1,6 @@
-FROM node:8-alpine as builder
+FROM node:10-alpine as builder
 
-ARG TAG=v1.5.6
+ARG TAG=v1.8.3
 ARG REGISTRY=https://registry.npm.taobao.org
 
 RUN apk add --no-cache git python make g++ \
@@ -9,7 +9,15 @@ RUN apk add --no-cache git python make g++ \
     && sed -i -e 's|init\.lock|runtime/init.lock|g' server/install.js \
     && npm install --no-optional --production --registry ${REGISTRY}
 
-FROM node:8-alpine
+RUN npm install -g yapi-cli ykit --registry ${REGISTRY}
+
+RUN npm config set sass_binary_site https://npm.taobao.org/mirrors/node-sass/
+
+COPY config.json /
+
+RUN yapi plugin --name yapi-plugin-interface-oauth2-token --registry ${REGISTRY}
+
+FROM node:10-alpine
 RUN apk add --no-cache tini
 
 WORKDIR /app/vendors

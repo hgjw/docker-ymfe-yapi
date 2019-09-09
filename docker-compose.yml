@@ -11,6 +11,7 @@ services:
       - MONGO_INITDB_DATABASE=yapi
     volumes:
       - ./mongo-data:/data/db
+    restart: always
   yapi:
     build:
       context: .
@@ -24,5 +25,6 @@ services:
     volumes:
       - ./config.json:/app/config.json
       - ./yapi-runtime:/app/runtime
+    restart: always
 networks:
   yapi:
