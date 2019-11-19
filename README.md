@@ -16,8 +16,10 @@
         - MONGO_INITDB_DATABASE=yapi
       volumes:
         - ./mongo-data:/data/db
+      restart: always
     yapi:
-      image: wyntau/ymfe-yapi
+      build:
+        context: .
       container_name: yapi
       depends_on:
         - mongo
@@ -28,6 +30,7 @@
       volumes:
         - ./config.json:/app/config.json
         - ./yapi-runtime:/app/runtime
+      restart: always
   networks:
     yapi:
   ```
